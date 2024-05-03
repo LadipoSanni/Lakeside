@@ -1,0 +1,89 @@
+# Define the AWS provider
+provider "aws" {
+  region = "us-east-1"  # Set your desired AWS region
+}
+
+# Create a VPC (Virtual Private Cloud)
+resource "aws_vpc" "petclinic_vpc" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = "petclinic-vpc"
+  }
+}
+
+# Create a Subnet within the VPC
+resource "aws_subnet" "petclinic_subnet" {
+  vpc_id            = aws_vpc.petclinic_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-east-1a"  # Specify your desired availability zone
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "petclinic-subnet"
+  }
+}
+
+# Create a Security Group for EC2 instance
+resource "aws_security_group" "petclinic_sg" {
+  name        = "petclinic-sg"
+  description = "Security group for pet clinic app EC2 instance"
+
+  vpc_id = aws_vpc.petclinic_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "petclinic-sg"
+  }
+}
+
+# Launch an EC2 instance
+resource "aws_instance" "petclinic_instance" {
+  ami             = "ami-12345678"  # Specify your desired AMI ID
+  instance_type   = "t2.micro"
+  subnet_id       = aws_subnet.petclinic_subnet.id
+  security_groups = [aws_security_group.petclinic_sg.name]
+
+  tags = {
+    Name = "petclinic-instance"
+  }
+}
+
+# Create an RDS (Relational Database Service) instance
+resource "aws_db_instance" "petclinic_db" {
+  engine               = "mysql"
+  instance_class       = "db.t2.micro"
+  name                 = "petclinic-db"
+  username             = "admin"
+  password             = "your_password"  # Replace with your desired password
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  publicly_accessible  = false
+  multi_az             = false
+  db_subnet_group_name = aws_db_subnet_group.petclinic_db_subnet_group.name
+
+  tags = {
+    Name = "petclinic-db"
+  }
+}
+
+# Create an RDS subnet group
+resource "aws_db_subnet_group" "petclinic_db_subnet_group" {
+  name       = "petclinic-db-subnet-group"
+  subnet_ids = [aws_subnet.petclinic_subnet.id]
+}
