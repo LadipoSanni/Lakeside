@@ -51,7 +51,6 @@ resource "aws_security_group" "petclinic_sg" {
     Name = "petclinic-sg"
   }
 }
-
 # Launch an EC2 instance
 resource "aws_instance" "petclinic_instance" {
   ami             = "ami-12345678"  # Specify your desired AMI ID
