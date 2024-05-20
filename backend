@@ -4,8 +4,8 @@ provider "aws" {
 
 locals {
   region      = "eu-west-1"
-  bucket_name = "semicolon-delivery-terraform-locking-bucket"
-  table_name  = "semicolon-delivery-terraform-locking-table"
+  bucket_name = "pc-delivery-terraform-locking-bucket"
+  table_name  = "pc-delivery-terraform-locking-table"
 }
 
 terraform {
