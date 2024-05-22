@@ -12,8 +12,6 @@ Hotel Booking Roles
 LIst of Available Rooms
 
 
-planet entire real lecture pudding wild among story grab frame lady caught
-
 icacls "C:\Users\Olamide\Desktop\LadiKP.pem" /inheritance:r /grant:r Olamide:F
 
 ssh -i C:\Users\Olamide\Desktop\LadiKP.pem ec2-user@3.70.157.56
