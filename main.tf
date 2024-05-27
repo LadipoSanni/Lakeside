@@ -7,3 +7,4 @@ resource "aws_vpc" "vpc"{
     tags  = {
         Name = "${var.project_name}-vpc"
     }
+
