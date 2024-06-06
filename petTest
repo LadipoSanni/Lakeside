@@ -86,3 +86,6 @@ resource "aws_db_subnet_group" "petclinic_db_subnet_group" {
   name       = "petclinic-db-subnet-group"
   subnet_ids = [aws_subnet.petclinic_subnet.id]
 }
+
+
+
